@@ -1,0 +1,79 @@
+---
+import Layout from "../layouts/Layout.astro";
+import fetch from 'node-fetch';
+---
+
+<Layout>
+  <h1>Add New Todo</h1>
+  <form id="addTodoForm" action="" method="POST">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" required />
+    <button type="submit">Add Todo</button>
+  </form>
+</Layout>
+
+<script>
+  const form = document.getElementById("addTodoForm");
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const newTodo = {
+        id: Date.now(),
+        title: formData.get('title'),
+        status: 'inProgress',
+      };
+      console.log(newTodo);
+      try {
+        const response = await fetch('http://localhost:8080/todos', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(newTodo)
+        });
+        const result = await response.json();
+        console.log(result);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+
+
+
+      
+      // const request = require('request');
+      // let options = {
+      //   'method': 'POST',
+      //   'url': 'http://localhost:8080/todos',
+      //   'headers': {
+      //     'Content-Type': 'application/json'
+      //   },
+      //   body: JSON.stringify(newTodo)
+
+      // };
+      // request(options, (error: any, response: any) => {
+      //   if (error) throw new Error(error);
+      //   console.log(response.body);
+      // });
+
+
+      // const myHeaders = new Headers();
+      // myHeaders.append("Content-Type", "application/json");
+      // const raw = JSON.stringify(newTodo);
+      // const requestOptions = {
+      //   method: "POST",
+      //   headers: myHeaders,
+      //   body: raw,
+      //   redirect: "follow"
+      // };
+      // fetch("http://localhost:8080/todos", requestOptions)
+      // .then((response) => response.text())
+      // .then((result) => console.log(result))
+      // .catch((error) => console.error(error));
+
+
+
+
+    });
+  }
+</script>

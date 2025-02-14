@@ -1,0 +1,60 @@
+---
+import db from '../db.json';
+
+interface ITodo {
+  id: number;
+  title: string;
+  status: 'inProgress' | 'completed';
+}
+
+const data: ITodo[] = db.todos;
+console.log('Data:: ', data);
+---
+
+<div id="container">
+  <main>
+    <section id="hero">
+      <h1>To Do List</h1>
+      <div class="cards">
+        {data.map((item) => (
+          <div class="card" data-key={item.id}>
+            <input
+              type="checkbox"
+              id={`${item.id}_status`}
+              checked={item.status === 'completed'}
+            />
+            <h2>{item.title}</h2>
+            <button> <a href={`/view/${item.id}/`}>View Todo</a> </button>
+            <button> <a href={`/edit/${item.id}/`}>Edit Todo</a> </button>
+            <button class="delete-button" data-id={item.id}>Delete</button>
+          </div>
+        ))}
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="/src/components/deleteTodo.js"></script>
+<script src="/src/components/updateStatus.js"></script>
+
+<style>
+  :root {
+    --background-color: #f0f0f0;
+    --text-color: #000000;
+    --link-color: #bb86fc;
+  }
+
+  .cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .card {
+    background: rgb(255, 255, 255);
+    border: 1px solid var(--link-color);
+    border-radius: 8px;
+    padding: 16px;
+    color: var(--text-color);
+  }
+</style>

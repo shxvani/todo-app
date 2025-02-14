@@ -1,0 +1,35 @@
+---
+import todos from '../../db.json';
+import Layout from '../../layouts/Layout.astro';
+
+export function getStaticPaths() {
+  if (!todos || !todos.todos) {
+    throw new Error('Todos data is not available');
+  }
+
+  console.log('Todos:', todos.todos);
+
+  return todos.todos
+    .filter((todo) => todo.id) // Filter out invalid todos
+    .map((todo) => {
+      return {
+        params: { id: todo.id.toString() }
+      };
+    });
+}
+
+const { id } = Astro.params;
+const task = todos.todos?.find((p) => p.id.toString() === id);
+
+if (!task) {
+  throw new Error(`Todo ${id} not found`);
+}
+
+const { title, status } = task;
+---
+
+<Layout>
+  <h1> Todo Id is {id}</h1>
+  <h3>Title: {title}</h3>
+  <h3>Status: {status}</h3>
+</Layout>
